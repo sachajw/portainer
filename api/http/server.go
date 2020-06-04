@@ -3,6 +3,7 @@ package http
 import (
 	"time"
 
+	"github.com/portainer/portainer/api/http/handler/customtemplates"
 	"github.com/portainer/portainer/api/http/handler/edgegroups"
 	"github.com/portainer/portainer/api/http/handler/edgestacks"
 	"github.com/portainer/portainer/api/http/handler/edgetemplates"
@@ -90,6 +91,11 @@ func (server *Server) Start() error {
 
 	var roleHandler = roles.NewHandler(requestBouncer)
 	roleHandler.DataStore = server.DataStore
+
+	var customTemplatesHandler = customtemplates.NewHandler(requestBouncer)
+	customTemplatesHandler.DataStore = server.DataStore
+	customTemplatesHandler.FileService = server.FileService
+	customTemplatesHandler.GitService = server.GitService
 
 	var dockerHubHandler = dockerhub.NewHandler(requestBouncer)
 	dockerHubHandler.DataStore = server.DataStore
@@ -204,6 +210,7 @@ func (server *Server) Start() error {
 	server.Handler = &handler.Handler{
 		RoleHandler:            roleHandler,
 		AuthHandler:            authHandler,
+		CustomTemplatesHandler: customTemplatesHandler,
 		DockerHubHandler:       dockerHubHandler,
 		EdgeGroupsHandler:      edgeGroupsHandler,
 		EdgeStacksHandler:      edgeStacksHandler,

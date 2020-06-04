@@ -42,6 +42,8 @@ const (
 	// ExtensionRegistryManagementStorePath represents the subfolder where files related to the
 	// registry management extension are stored.
 	ExtensionRegistryManagementStorePath = "extensions"
+	// CustomTemplateStorePath represents the subfolder where custom template files are stored in the file store folder.
+	CustomTemplateStorePath = "custom_templates"
 )
 
 // Service represents a service for managing files and directories.
@@ -390,6 +392,32 @@ func (service *Service) getContentFromPEMFile(filePath string) ([]byte, error) {
 
 	block, _ := pem.Decode(fileContent)
 	return block.Bytes, nil
+}
+
+// GetCustomTemplateProjectPath returns the absolute path on the FS for a custom template based
+// on its identifier.
+func (service *Service) GetCustomTemplateProjectPath(identifier string) string {
+	return path.Join(service.fileStorePath, CustomTemplateStorePath, identifier)
+}
+
+// StoreCustomTemplateFileFromBytes creates a subfolder in the CustomTemplateStorePath and stores a new file from bytes.
+// It returns the path to the folder where the file is stored.
+func (service *Service) StoreCustomTemplateFileFromBytes(identifier, fileName string, data []byte) (string, error) {
+	customTemplateStorePath := path.Join(CustomTemplateStorePath, identifier)
+	err := service.createDirectoryInStore(customTemplateStorePath)
+	if err != nil {
+		return "", err
+	}
+
+	templateFilePath := path.Join(customTemplateStorePath, fileName)
+	r := bytes.NewReader(data)
+
+	err = service.createFileInStore(templateFilePath, r)
+	if err != nil {
+		return "", err
+	}
+
+	return path.Join(service.fileStorePath, customTemplateStorePath), nil
 }
 
 // GetScheduleFolder returns the absolute path on the filesystem for a schedule based
