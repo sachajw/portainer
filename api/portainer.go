@@ -65,6 +65,17 @@ type (
 		ValidateFlags(flags *CLIFlags) error
 	}
 
+	// CustomTemplate represents a custom template
+	CustomTemplate struct {
+		ID          CustomTemplateID
+		Name        string
+		ProjectPath string
+		EntryPoint  string
+	}
+
+	// CustomTemplateID represents a custom template identifier
+	CustomTemplateID int
+
 	// DataStore defines the interface to manage the data
 	DataStore interface {
 		Open() error
@@ -723,6 +734,15 @@ type (
 	CryptoService interface {
 		Hash(data string) (string, error)
 		CompareHashAndData(hash string, data string) error
+	}
+
+	// CustomTemplateService represents a service to manage custom templates
+	CustomTemplateService interface {
+		CustomTemplates() ([]CustomTemplate, error)
+		CustomTemplate() (*CustomTemplate, error)
+		CreateCustomTemplate(customTemplate *CustomTemplate) error
+		UpdateCustomTemplate(ID CustomTemplateID, customTemplate *CustomTemplate) error
+		DeleteCustomTemplate(ID CustomTemplateID) error
 	}
 
 	// DigitalSignatureService represents a service to manage digital signatures
