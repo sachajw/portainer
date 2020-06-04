@@ -531,6 +531,39 @@ angular.module('portainer.app', []).config([
       },
     };
 
+    const customTemplates = {
+      name: 'portainer.templates.custom',
+      url: '/custom',
+
+      views: {
+        'content@': {
+          component: 'customTemplatesView',
+        },
+      },
+    };
+
+    const customTemplatesNew = {
+      name: 'portainer.templates.custom.new',
+      url: '/new',
+
+      views: {
+        'content@': {
+          component: 'createCustomTemplateView',
+        },
+      },
+    };
+
+    const customTemplatesEdit = {
+      name: 'portainer.templates.custom.edit',
+      url: '/:id',
+
+      views: {
+        'content@': {
+          component: 'editCustomTemplateView',
+        },
+      },
+    };
+
     $stateRegistryProvider.register(root);
     $stateRegistryProvider.register(portainer);
     $stateRegistryProvider.register(about);
@@ -571,5 +604,8 @@ angular.module('portainer.app', []).config([
     $stateRegistryProvider.register(teams);
     $stateRegistryProvider.register(team);
     $stateRegistryProvider.register(templates);
+    $stateRegistryProvider.register(customTemplates);
+    $stateRegistryProvider.register(customTemplatesNew);
+    $stateRegistryProvider.register(customTemplatesEdit);
   },
 ]);
