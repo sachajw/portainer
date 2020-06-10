@@ -67,16 +67,26 @@ type (
 
 	// CustomTemplate represents a custom template
 	CustomTemplate struct {
-		ID              CustomTemplateID `json:"Id"`
-		Title           string           `json:"Title"`
-		Description     string           `json:"Description"`
-		ProjectPath     string           `json:"ProjectPath"`
-		EntryPoint      string           `json:"EntryPoint"`
-		CreatedByUserID UserID           `json:"CreatedByUserId"`
+		ID              CustomTemplateID       `json:"Id"`
+		Title           string                 `json:"Title"`
+		Description     string                 `json:"Description"`
+		ProjectPath     string                 `json:"ProjectPath"`
+		EntryPoint      string                 `json:"EntryPoint"`
+		CreatedByUserID UserID                 `json:"CreatedByUserId"`
+		Note            string                 `json:"Note"`
+		Platform        CustomTemplatePlatform `json:"Platform"`
+		Logo            string                 `json:"Logo"`
+		Type            CustomTemplateType     `json:"Type"`
 	}
 
 	// CustomTemplateID represents a custom template identifier
 	CustomTemplateID int
+
+	// CustomTemplatePlatform represents a custom template platform
+	CustomTemplatePlatform int
+
+	// CustomTemplateType represents a custom template type
+	CustomTemplateType int
 
 	// DataStore defines the interface to manage the data
 	DataStore interface {
@@ -1095,6 +1105,22 @@ const (
 	AuthenticationLDAP
 	//AuthenticationOAuth represents the OAuth authentication method (authentication against a authorization server)
 	AuthenticationOAuth
+)
+
+const (
+	_ CustomTemplatePlatform = iota
+	// CustomTemplatePlatformLinux represents a custom template for linux
+	CustomTemplatePlatformLinux
+	// CustomTemplatePlatformWindows represents a custom template for windows
+	CustomTemplatePlatformWindows
+)
+
+const (
+	_ CustomTemplateType = iota
+	// CustomTemplateTypeStandalone represents custom template for a standalone stack
+	CustomTemplateTypeStandalone
+	// CustomTemplateTypeSwarm represents custom template for a swarm stack
+	CustomTemplateTypeSwarm
 )
 
 const (
