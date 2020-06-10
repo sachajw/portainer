@@ -128,6 +128,12 @@ angular.module('portainer.app').factory('ModalService', [
       });
     };
 
+    service.confirmDeletionAsync = function confirmDeletionAsync(message) {
+      return new Promise((resolve) => {
+        service.confirmDeletion(message, (confirmed) => resolve(confirmed));
+      });
+    };
+
     service.confirmContainerDeletion = function (title, callback) {
       prompt({
         title: title,
