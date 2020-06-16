@@ -11,6 +11,7 @@ import (
 	"github.com/portainer/libhttp/request"
 	"github.com/portainer/libhttp/response"
 	"github.com/portainer/portainer/api"
+	bolterrors "github.com/portainer/portainer/api/bolt/errors"
 )
 
 type taskContainer struct {
@@ -38,7 +39,7 @@ func (handler *Handler) scheduleTasks(w http.ResponseWriter, r *http.Request) *h
 	}
 
 	schedule, err := handler.DataStore.Schedule().Schedule(portainer.ScheduleID(scheduleID))
-	if err == portainer.ErrObjectNotFound {
+	if err == bolterrors.ErrObjectNotFound {
 		return &httperror.HandlerError{http.StatusNotFound, "Unable to find a schedule with the specified identifier inside the database", err}
 	} else if err != nil {
 		return &httperror.HandlerError{http.StatusInternalServerError, "Unable to find a schedule with the specified identifier inside the database", err}
@@ -52,7 +53,7 @@ func (handler *Handler) scheduleTasks(w http.ResponseWriter, r *http.Request) *h
 
 	for _, endpointID := range schedule.ScriptExecutionJob.Endpoints {
 		endpoint, err := handler.DataStore.Endpoint().Endpoint(endpointID)
-		if err == portainer.ErrObjectNotFound {
+		if err == bolterrors.ErrObjectNotFound {
 			continue
 		} else if err != nil {
 			return &httperror.HandlerError{http.StatusInternalServerError, "Unable to find an endpoint with the specified identifier inside the database", err}
