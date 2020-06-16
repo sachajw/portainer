@@ -1,15 +1,21 @@
 package stacks
 
 import (
-	"github.com/portainer/portainer/api/bolt/errors"
+	"errors"
 	"net/http"
 	"sync"
 
 	"github.com/gorilla/mux"
 	httperror "github.com/portainer/libhttp/error"
 	"github.com/portainer/portainer/api"
+	bolterrors "github.com/portainer/portainer/api/bolt/errors"
 	"github.com/portainer/portainer/api/http/security"
 	"github.com/portainer/portainer/api/internal/authorization"
+)
+
+var (
+	errStackAlreadyExists = errors.New("A stack already exists with this name")
+	errStackNotExternal   = errors.New("Not an external stack")
 )
 
 // Handler is the HTTP handler used to handle stack operations.
@@ -65,9 +71,9 @@ func (handler *Handler) userCanAccessStack(securityContext *security.RestrictedR
 	}
 
 	_, err := handler.DataStore.Extension().Extension(portainer.RBACExtension)
-	if err == errors.ErrObjectNotFound {
+	if err == bolterrors.ErrObjectNotFound {
 		return false, nil
-	} else if err != nil && err != errors.ErrObjectNotFound {
+	} else if err != nil && err != bolterrors.ErrObjectNotFound {
 		return false, err
 	}
 
