@@ -2,7 +2,7 @@ version: '2'
 
 services:
   portainer:
-    image: portainer/portainer
+    image: portainer/portainer:latest
     restart: always
     ports:
       - "9000:9000"
